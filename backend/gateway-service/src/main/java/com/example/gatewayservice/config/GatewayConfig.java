@@ -15,6 +15,8 @@ public class GatewayConfig {
                         .uri("lb://auth-service")
                 ).route("trip-service", r -> r
                         .path("/api/trips/**")
+                        .or()
+                        .path("/api/cities/**")
                         .uri("lb://trip-service")
                 ).build();
     }
