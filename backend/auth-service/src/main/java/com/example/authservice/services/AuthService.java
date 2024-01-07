@@ -1,8 +1,8 @@
 package com.example.authservice.services;
 
-import com.example.authservice.dtos.LoginRequest;
-import com.example.authservice.dtos.LoginResponse;
-import com.example.authservice.dtos.RegisterRequest;
+import com.example.authservice.dtos.login.LoginRequest;
+import com.example.authservice.dtos.login.LoginResponse;
+import com.example.authservice.dtos.register.RegisterRequest;
 import com.example.authservice.entities.User;
 import com.example.authservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

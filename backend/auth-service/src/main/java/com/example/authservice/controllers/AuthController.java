@@ -1,8 +1,8 @@
 package com.example.authservice.controllers;
 
-import com.example.authservice.dtos.LoginRequest;
-import com.example.authservice.dtos.LoginResponse;
-import com.example.authservice.dtos.RegisterRequest;
+import com.example.authservice.dtos.login.LoginRequest;
+import com.example.authservice.dtos.login.LoginResponse;
+import com.example.authservice.dtos.register.RegisterRequest;
 import com.example.authservice.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

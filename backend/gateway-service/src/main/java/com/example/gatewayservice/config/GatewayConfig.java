@@ -16,6 +16,8 @@ public class GatewayConfig {
         return builder.routes()
                 .route("auth-service", r -> r
                         .path("/api/auth/**")
+                        .or()
+                        .path("/api/profile")
                         .filters(f -> f.filter(filter))
                         .uri("lb://auth-service")
                 ).route("trip-service", r -> r
