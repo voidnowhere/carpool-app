@@ -15,7 +15,7 @@ import java.util.UUID;
 public class RatingController {
     private final RatingService service;
 
-    @PostMapping
+    @PatchMapping
     public ResponseEntity<String> store(
             @RequestBody RatingRequest request,
             @RequestHeader("User-Id") UUID userId
