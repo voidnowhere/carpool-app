@@ -16,13 +16,13 @@ public class Passenger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private UUID userId;
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private User user;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Trip trip;
 
-    public Passenger(UUID userId, Trip trip) {
-        this.userId = userId;
+    public Passenger(User user, Trip trip) {
+        this.user = user;
         this.trip = trip;
     }
 }

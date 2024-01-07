@@ -1,9 +1,10 @@
 package com.example.tripservice.controllers;
 
-import com.example.tripservice.dtos.TripRequest;
-import com.example.tripservice.dtos.TripResponse;
+import com.example.tripservice.dtos.trip.TripRequest;
+import com.example.tripservice.dtos.trip.TripResponse;
 import com.example.tripservice.entities.City;
 import com.example.tripservice.entities.Trip;
+import com.example.tripservice.entities.User;
 import com.example.tripservice.services.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,7 +31,7 @@ public class TripController {
                 tripRequest.getSeats(),
                 new City(tripRequest.getDepartureCityId()),
                 new City(tripRequest.getArrivalCityId()),
-                userId
+                new User(userId)
         ));
     }
 
