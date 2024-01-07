@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -14,14 +15,20 @@ public class RatingService {
     private final RatingRepository repository;
 
     public ResponseEntity<String> store(Rating rating) {
-        if (repository.existsByRaterIdAndRatedId(rating.getRaterId(), rating.getRatedId())) {
-            return ResponseEntity.badRequest().build();
-        }
         if (rating.getValue() > 5) {
             return ResponseEntity.badRequest().build();
         }
 
-        repository.save(rating);
+        Optional<Rating> optionalRating = repository.findByRaterIdAndRatedId(rating.getRaterId(), rating.getRatedId());
+
+        if (optionalRating.isEmpty()) {
+            repository.save(rating);
+        } else {
+            Rating existedRating = optionalRating.get();
+            existedRating.setValue(rating.getValue());
+            repository.save(existedRating);
+        }
+
         return ResponseEntity.ok().build();
     }
 
