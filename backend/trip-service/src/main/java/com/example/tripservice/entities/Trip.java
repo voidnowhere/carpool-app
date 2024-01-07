@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -23,16 +22,16 @@ public class Trip {
     private City departure;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private City arrival;
-    @Column(nullable = false)
-    private UUID userId;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private User driver;
     @OneToMany(mappedBy = "trip")
     private List<Passenger> passengers;
 
-    public Trip(Date dateTime, int seats, City departure, City arrival, UUID userId) {
+    public Trip(Date dateTime, int seats, City departure, City arrival, User driver) {
         this.dateTime = dateTime;
         this.seats = seats;
         this.departure = departure;
         this.arrival = arrival;
-        this.userId = userId;
+        this.driver = driver;
     }
 }

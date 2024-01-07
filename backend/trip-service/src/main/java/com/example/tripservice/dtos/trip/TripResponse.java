@@ -1,4 +1,4 @@
-package com.example.tripservice.dtos;
+package com.example.tripservice.dtos.trip;
 
 import com.example.tripservice.entities.City;
 import lombok.AllArgsConstructor;
@@ -20,4 +20,5 @@ public class TripResponse {
     private City arrival;
     private boolean joined;
     private boolean owner;
+    private Driver driver;
 }

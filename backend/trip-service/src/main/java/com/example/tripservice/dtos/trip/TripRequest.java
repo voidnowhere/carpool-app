@@ -1,4 +1,4 @@
-package com.example.tripservice.dtos;
+package com.example.tripservice.dtos.trip;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

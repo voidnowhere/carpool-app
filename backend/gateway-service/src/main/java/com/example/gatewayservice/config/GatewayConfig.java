@@ -18,6 +18,8 @@ public class GatewayConfig {
                         .path("/api/auth/**")
                         .or()
                         .path("/api/profile")
+                        .or()
+                        .path("/api/users/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://auth-service")
                 ).route("trip-service", r -> r
@@ -26,6 +28,10 @@ public class GatewayConfig {
                         .path("/api/cities/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://trip-service")
+                ).route("rating-service", r -> r
+                        .path("/api/ratings/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://rating-service")
                 ).build();
     }
 }

@@ -1,17 +1,20 @@
 package com.example.tripservice.services;
 
-import com.example.tripservice.dtos.TripResponse;
+import com.example.tripservice.clients.UserClient;
+import com.example.tripservice.dtos.trip.Driver;
+import com.example.tripservice.dtos.trip.TripResponse;
+import com.example.tripservice.dtos.user.UserResponse;
 import com.example.tripservice.entities.Passenger;
 import com.example.tripservice.entities.Trip;
+import com.example.tripservice.entities.User;
 import com.example.tripservice.repositories.PassengerRepository;
 import com.example.tripservice.repositories.TripRepository;
+import com.example.tripservice.repositories.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.HeaderParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -23,8 +26,23 @@ import java.util.UUID;
 public class TripService {
     private final TripRepository tripRepository;
     private final PassengerRepository passengerRepository;
+    private final UserRepository userRepository;
+    private final UserClient userClient;
 
     public ResponseEntity<String> store(Trip trip) {
+        UUID userId = trip.getDriver().getId();
+        UserResponse userResponse = userClient.get(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            userRepository.save(new User(userId, userResponse.getName(), userResponse.getEmail()));
+        } else {
+            User user = optionalUser.get();
+            user.setName(userResponse.getName());
+            user.setEmail(userResponse.getEmail());
+            userRepository.save(user);
+        }
+
         tripRepository.save(trip);
         return ResponseEntity.ok().build();
     }
@@ -43,8 +61,9 @@ public class TripService {
                 t.getSeats() - t.getPassengers().size(),
                 t.getDeparture(),
                 t.getArrival(),
-                t.getPassengers().stream().anyMatch(p -> p.getUserId().equals(userId)),
-                t.getUserId().equals(userId)
+                t.getPassengers().stream().anyMatch(p -> p.getUser().getId().equals(userId)),
+                t.getDriver().getId().equals(userId),
+                new Driver(t.getDriver().getId(), t.getDriver().getName())
         )).toList();
 
         return ResponseEntity.ok(tripsResponse);
@@ -59,11 +78,11 @@ public class TripService {
 
         Trip trip = optionalTrip.get();
 
-        if (trip.getUserId().equals(userId)) {
+        if (trip.getDriver().getId().equals(userId)) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (trip.getPassengers().stream().anyMatch(p -> p.getUserId().equals(userId))) {
+        if (trip.getPassengers().stream().anyMatch(p -> p.getUser().getId().equals(userId))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("already joined");
         }
 
@@ -75,7 +94,7 @@ public class TripService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("max capacity");
         }
 
-        passengerRepository.save(new Passenger(userId, trip));
+        passengerRepository.save(new Passenger(new User(userId), trip));
 
         return ResponseEntity.ok().build();
     }
