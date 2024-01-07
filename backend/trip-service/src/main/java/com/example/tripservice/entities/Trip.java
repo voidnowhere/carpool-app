@@ -1,9 +1,11 @@
 package com.example.tripservice.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,7 @@ public class Trip {
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date dateTime;
+    private LocalDateTime dateTime;
     private int seats;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private City departure;
@@ -27,7 +29,7 @@ public class Trip {
     @OneToMany(mappedBy = "trip")
     private List<Passenger> passengers;
 
-    public Trip(Date dateTime, int seats, City departure, City arrival, User driver) {
+    public Trip(LocalDateTime dateTime, int seats, City departure, City arrival, User driver) {
         this.dateTime = dateTime;
         this.seats = seats;
         this.departure = departure;

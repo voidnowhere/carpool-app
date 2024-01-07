@@ -29,9 +29,17 @@ public class GatewayConfig {
                         .filters(f -> f.filter(filter))
                         .uri("lb://trip-service")
                 ).route("rating-service", r -> r
-                        .path("/api/ratings/**")
+                        .path("/api/ratings")
+                        .or()
+                        .path("/api/ratings/users/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://rating-service")
+                ).route("message-service", r -> r
+                        .path("/api/messages")
+                        .or()
+                        .path("/api/messages/trips/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://message-service")
                 ).build();
     }
 }
