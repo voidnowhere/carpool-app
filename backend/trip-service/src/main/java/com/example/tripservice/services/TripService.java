@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,7 +48,7 @@ public class TripService {
     }
 
     public ResponseEntity<List<TripResponse>> getAll(
-            Date dateTime,
+            LocalDateTime dateTime,
             Long departureCityId,
             Long arrivalCityId,
             UUID userId
@@ -86,7 +86,7 @@ public class TripService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("already joined");
         }
 
-        if (trip.getDateTime().before(new Date())) {
+        if (trip.getDateTime().isBefore(LocalDateTime.now())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("not available");
         }
 
