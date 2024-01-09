@@ -20,7 +20,7 @@ public class RatingService {
         }
 
         Optional<Rating> optionalRating = repository.findByRaterIdAndRatedId(rating.getRaterId(), rating.getRatedId());
-
+        System.out.println(rating.getValue());
         if (optionalRating.isEmpty()) {
             repository.save(rating);
         } else {

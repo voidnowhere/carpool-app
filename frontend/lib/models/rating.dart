@@ -1,15 +1,14 @@
+
 class Rating {
-  int id;
-  int stars;
-  
+   int stars;
+   
 
+  Rating({required this.stars});
 
-  Trip({
-    this.id = 0,
-    required this.dateTime,
-    required this.seats,
-    required this.departure,
-    required this.arrival,
-    this.joined = false,
-    this.owner = false,
-  });
+  factory Rating.fromJson(Map<String, dynamic> json) {
+    return Rating(
+      
+      stars: json['value'] as int,
+    );
+  }
+}

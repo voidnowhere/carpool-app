@@ -1,4 +1,5 @@
 import 'package:carpool/models/city.dart';
+import 'package:carpool/models/driver.dart';
 import 'package:carpool/models/trip.dart';
 import 'package:carpool/services/api_service.dart';
 
