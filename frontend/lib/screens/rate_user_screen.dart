@@ -4,29 +4,7 @@ import 'package:carpool/models/user.dart';
 import 'package:carpool/services/rating_service.dart';
 import 'package:flutter/material.dart';
 
-// class RatingsScreen extends StatefulWidget{
-//     const RatingsScreen({super.key});
-//      @override
-//   State<RatingsScreen> createState() => _RatingsScreenState();
-// }
 
-// class _RatingsScreenState extends State<RatingsScreen>{
-//   Driver? _driver;
-//   Rating? _rating;
-
-//   void _getRated(){
-//     RatingService.getUser(_driver!.id).then((value) {
-//       setState(() {
-
-//       });
-//     });
-//   }
-
-//   void _getRating(){
-//     RatingService.getRating(_driver!.id).then((value) => null)
-//   }
-
-// }
 class RateUserScreen extends StatefulWidget {
   Driver driver;
   RateUserScreen({super.key, required this.driver});
@@ -48,7 +26,6 @@ class _RateUserScreenState extends State<RateUserScreen> {
         _user = value;
       });
     });
-    // get totale rating to displzy
     RatingService.getRating(widget.driver.id).then((value) {
       setState(() {
         _rating = Rating(stars: value);
@@ -62,20 +39,7 @@ class _RateUserScreenState extends State<RateUserScreen> {
     });
   }
 
-  // void _getRated(){
-  //   RatingService.getUser(_driver!.id).then((value) {
-  //     setState(() {
-  //       _user = value;
-  //     });
-  //   });
-  //  }
-  // void _getRating(){
-  //   RatingService.getRating(_driver!.id).then((value) {
-  //    setState(() {
-  //      _rating!.stars = value;
-  //    });
-  //   });
-  //  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
