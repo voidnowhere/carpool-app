@@ -6,7 +6,7 @@ void main() {
     title: 'Carpool',
     initialRoute: 'trips',
     routes: {
-      'trips': (context) => const TripsScreen()
+      'trips': (context) => const TripsScreen(),
     },
   ));
 }

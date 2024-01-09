@@ -1,4 +1,5 @@
 import 'package:carpool/models/city.dart';
+import 'package:carpool/models/driver.dart';
 import 'package:intl/intl.dart';
 
 class Trip {
@@ -9,6 +10,8 @@ class Trip {
   City arrival;
   bool joined;
   bool owner;
+  Driver driver; 
+  
 
   Trip({
     this.id = 0,
@@ -18,6 +21,7 @@ class Trip {
     required this.arrival,
     this.joined = false,
     this.owner = false,
+    required this.driver,
   });
 
   String get dateTimeFormated {
@@ -39,6 +43,10 @@ class Trip {
       ),
       joined: json['joined'],
       owner: json['owner'],
+      driver: Driver(
+        id: json['driver']['id'],
+        name: json["driver"]['name']
+        ),
     );
   }
 
@@ -48,6 +56,7 @@ class Trip {
       'seats': seats,
       'departureCityId': departure.id,
       'arrivalCityId': arrival.id,
+      'driverId' : driver.id
     };
   }
 }

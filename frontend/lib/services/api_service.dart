@@ -8,13 +8,13 @@ class ApiService {
   static Dio get instance {
     _instance ??= Dio(
       BaseOptions(
-        baseUrl: 'http://10.0.2.2:8080/api',
+        baseUrl: 'http://localhost:8080/api',
         connectTimeout: const Duration(seconds: 10),
         headers: Map.from({
-          'User-Id': 'c39237eb-f8f1-461d-8a3f-bd086d0189b0',
+          'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzk5ODIzMi04NmViLTQ2MDktYmFmMy0yMWZhMWE3MzcwMTIiLCJpYXQiOjE3MDQ3OTQ2MTIsImV4cCI6MTcwNDg4MTAxMn0.rnXi6qJb3Y8ZK_WEIRSzUbmunJSS6rTbd5vDv9vH0oE',
         })
       ),
-    );
+    );  
 
     return _instance!;
   }
