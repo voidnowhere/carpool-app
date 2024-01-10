@@ -173,7 +173,7 @@ class _TripsScreenState extends State<TripsScreen> {
                     return ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          if (t.joined) {
+                          if (t.joined || t.owner) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
