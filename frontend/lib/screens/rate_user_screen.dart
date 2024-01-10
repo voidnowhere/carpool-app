@@ -4,20 +4,20 @@ import 'package:carpool/models/user.dart';
 import 'package:carpool/services/rating_service.dart';
 import 'package:flutter/material.dart';
 
-
 class RateUserScreen extends StatefulWidget {
-  Driver driver;
-  RateUserScreen({super.key, required this.driver});
+  final Driver driver;
+  const RateUserScreen({super.key, required this.driver});
 
   @override
   State<RateUserScreen> createState() => _RateUserScreenState();
 }
 
 class _RateUserScreenState extends State<RateUserScreen> {
-  int selected_rate = 0; // Initial rating value
+  int _selectedRate = 0; // Initial rating value
   Rating? _rating;
   User? _user;
 
+  @override
   void initState() {
     super.initState();
     //get driver to display
@@ -34,11 +34,8 @@ class _RateUserScreenState extends State<RateUserScreen> {
   }
 
   void _updateRating(int ratingVal, String driverId) {
-    RatingService.updateRating(ratingVal, driverId).then((value) {
-      print(ratingVal);
-    });
+    RatingService.updateRating(ratingVal, driverId).then((value) {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +50,7 @@ class _RateUserScreenState extends State<RateUserScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               (_rating == null && _user == null)
-                  ? CircularProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : const Icon(
                       Icons.account_circle,
                       color: Color.fromARGB(255, 99, 154, 249),
@@ -80,7 +77,7 @@ class _RateUserScreenState extends State<RateUserScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 enabled: false,
                 initialValue: _user!.email,
@@ -89,18 +86,18 @@ class _RateUserScreenState extends State<RateUserScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
                   return IconButton(
                     onPressed: () {
                       setState(() {
-                        selected_rate = index + 1;
+                        _selectedRate = index + 1;
                       });
                     },
                     icon: Icon(
-                      index < selected_rate.floor()
+                      index < _selectedRate.floor()
                           ? Icons.star
                           : Icons.star_border,
                       color: Colors.amber,
@@ -109,12 +106,12 @@ class _RateUserScreenState extends State<RateUserScreen> {
                   );
                 }),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  _updateRating(selected_rate, widget.driver.id);
+                  _updateRating(_selectedRate, widget.driver.id);
                 },
-                child: Text('Submit Rating'),
+                child: const Text('Submit Rating'),
               ),
             ],
           ),

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:carpool/models/city.dart';
-import 'package:carpool/models/driver.dart';
 import 'package:carpool/models/trip.dart';
 import 'package:carpool/services/trip_service.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +19,7 @@ class _AddTripDialogState extends State<AddTripDialog> {
   final _dateTimeController = TextEditingController();
   final _seatsController = TextEditingController();
   City? _departureCity;
-  City? _arrivalCity;
-  Driver? _driver;  
+  City? _arrivalCity;  
 
   void _addTrip() {
     TripService.store(Trip(
@@ -31,7 +27,6 @@ class _AddTripDialogState extends State<AddTripDialog> {
       seats: int.parse(_seatsController.text),
       departure: _departureCity!,
       arrival: _arrivalCity!,
-      driver: _driver!,
     )).then((value) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Trip has beed added!')));

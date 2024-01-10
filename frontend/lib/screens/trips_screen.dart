@@ -142,18 +142,18 @@ class _TripsScreenState extends State<TripsScreen> {
                           children: [
                             Text('${t.departure.name} to ${t.arrival.name}'),
                             (t.owner)
-                                ? Text('yourself')
+                                ? const Text('Yourself')
                                 : ElevatedButton(
                                     onPressed: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              RateUserScreen(driver: t.driver),
+                                              RateUserScreen(driver: t.driver!),
                                         ),
                                       );
                                     },
-                                    child: Text(t.driver.name),
+                                    child: Text(t.driver!.name),
                                   ),
                           ]),
                       isThreeLine: true,

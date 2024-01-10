@@ -1,6 +1,5 @@
 import 'package:carpool/models/user.dart';
 import 'package:carpool/services/api_service.dart';
-import 'package:dio/dio.dart';
 
 class RatingService {
   RatingService._();
