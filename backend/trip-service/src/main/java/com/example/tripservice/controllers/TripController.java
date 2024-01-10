@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ public class TripController {
 
     @GetMapping
     public ResponseEntity<List<TripResponse>> getAll(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime dateTime,
             @RequestParam Long departureCityId,
             @RequestParam Long arrivalCityId,
             @RequestHeader("User-Id") UUID userId

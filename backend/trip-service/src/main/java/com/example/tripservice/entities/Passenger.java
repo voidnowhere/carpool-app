@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Table(indexes = {@Index(unique = true, columnList = "user_id, trip_id")})
 @Getter

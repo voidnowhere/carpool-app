@@ -1,6 +1,7 @@
 import 'package:carpool/dialogs/add_trip_modal.dart';
 import 'package:carpool/models/city.dart';
 import 'package:carpool/models/trip.dart';
+import 'package:carpool/screens/rate_user_screen.dart';
 import 'package:carpool/services/city_service.dart';
 import 'package:carpool/services/trip_service.dart';
 import 'package:flutter/material.dart';
@@ -136,8 +137,25 @@ class _TripsScreenState extends State<TripsScreen> {
                         child: const Icon(Icons.people),
                       ),
                       title: Text(t.dateTimeFormated),
-                      subtitle:
-                          Text('${t.departure.name} to ${t.arrival.name}'),
+                      subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${t.departure.name} to ${t.arrival.name}'),
+                            (t.owner)
+                                ? Text('yourself')
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RateUserScreen(driver: t.driver),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(t.driver.name),
+                                  ),
+                          ]),
                       isThreeLine: true,
                       trailing: (!t.owner)
                           ? (!t.joined)

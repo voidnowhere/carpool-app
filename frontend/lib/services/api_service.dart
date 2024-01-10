@@ -20,7 +20,7 @@ class ApiService {
         baseUrl: 'http://localhost:8080/api',
         connectTimeout: const Duration(seconds: 10),
       ),
-    );
+    );  
 
      _instance!.interceptors.add(
         InterceptorsWrapper(

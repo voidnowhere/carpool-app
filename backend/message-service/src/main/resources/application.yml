@@ -3,14 +3,11 @@ server:
 spring:
   application:
     name: message-service
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  datasource:
-    url: jdbc:mysql://localhost:3306/message-service
-    username: root
-    password:
+  data:
+    mongodb:
+      database: message-service
+      port: 27017
+      host: localhost
 eureka:
   client:
     service-url:
