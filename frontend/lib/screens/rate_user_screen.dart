@@ -4,20 +4,20 @@ import 'package:carpool/models/user.dart';
 import 'package:carpool/services/rating_service.dart';
 import 'package:flutter/material.dart';
 
-
 class RateUserScreen extends StatefulWidget {
-  Driver driver;
-  RateUserScreen({super.key, required this.driver});
+  final Driver driver;
+  const RateUserScreen({super.key, required this.driver});
 
   @override
   State<RateUserScreen> createState() => _RateUserScreenState();
 }
 
 class _RateUserScreenState extends State<RateUserScreen> {
-  int selected_rate = 0; // Initial rating value
+  int _selectedRate = 0; // Initial rating value
   Rating? _rating;
   User? _user;
 
+  @override
   void initState() {
     super.initState();
     //get driver to display
@@ -35,10 +35,11 @@ class _RateUserScreenState extends State<RateUserScreen> {
 
   void _updateRating(int ratingVal, String driverId) {
     RatingService.updateRating(ratingVal, driverId).then((value) {
-      print(ratingVal);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Rated successfully!')));
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,69 +54,74 @@ class _RateUserScreenState extends State<RateUserScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               (_rating == null && _user == null)
-                  ? CircularProgressIndicator()
-                  : const Icon(
-                      Icons.account_circle,
-                      color: Color.fromARGB(255, 99, 154, 249),
-                      size: 150.0,
-                    ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return Icon(
-                    index < _rating!.stars.floor()
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: Colors.amber,
-                    size: 32,
-                  );
-                }),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _user!.name,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                enabled: false,
-                initialValue: _user!.email,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return IconButton(
-                    onPressed: () {
-                      setState(() {
-                        selected_rate = index + 1;
-                      });
-                    },
-                    icon: Icon(
-                      index < selected_rate.floor()
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: Colors.amber,
-                      size: 32,
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  _updateRating(selected_rate, widget.driver.id);
-                },
-                child: Text('Submit Rating'),
-              ),
+                  ? const CircularProgressIndicator()
+                  : Column(
+                      children: [
+                        const Icon(
+                          Icons.account_circle,
+                          color: Color.fromARGB(255, 99, 154, 249),
+                          size: 150.0,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            return Icon(
+                              index < (_rating?.stars ?? 0)
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                              size: 32,
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          enabled: false,
+                          initialValue: _user?.name ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'Name',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          enabled: false,
+                          initialValue: _user?.email ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            return IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedRate = index + 1;
+                                });
+                              },
+                              icon: Icon(
+                                index < _selectedRate.floor()
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: Colors.amber,
+                                size: 32,
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            _updateRating(_selectedRate, widget.driver.id);
+                          },
+                          child: const Text('Submit Rating'),
+                        ),
+                      ],
+                    )
             ],
           ),
         ),

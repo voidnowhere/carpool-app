@@ -10,7 +10,7 @@ class Trip {
   City arrival;
   bool joined;
   bool owner;
-  Driver driver; 
+  Driver? driver; 
   
 
   Trip({
@@ -21,7 +21,7 @@ class Trip {
     required this.arrival,
     this.joined = false,
     this.owner = false,
-    required this.driver,
+    this.driver,
   });
 
   String get dateTimeFormated {
@@ -56,7 +56,6 @@ class Trip {
       'seats': seats,
       'departureCityId': departure.id,
       'arrivalCityId': arrival.id,
-      'driverId' : driver.id
     };
   }
 }

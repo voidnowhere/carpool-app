@@ -1,5 +1,4 @@
 import 'package:carpool/screens/login/login_form.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -12,26 +11,19 @@ class LoginScreen extends StatelessWidget {
         title: const Text('Login'),
         actions: [
           TextButton(
-            child: const Text('Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                )),
+            child: const Text(
+              'Register',
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
             onPressed: () {
-              Navigator.pushNamed(context, '/register');
+              Navigator.pushNamed(context, 'register');
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 25),
-        child: Column(
-          children: [
-            Image.asset('assets/logo.png', height: 100),
-            const LoginForm(),
-          ]
-          ), 
-        ),
+      body: const LoginForm(),
     );
   }
 }

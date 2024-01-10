@@ -1,7 +1,7 @@
 import 'package:carpool/models/city.dart';
-import 'package:carpool/models/driver.dart';
 import 'package:carpool/models/trip.dart';
 import 'package:carpool/services/api_service.dart';
+import 'package:intl/intl.dart';
 
 class TripService {
   TripService._();
@@ -14,7 +14,7 @@ class TripService {
     final response = await ApiService.instance.get(
       '/trips',
       queryParameters: Map.from({
-        'dateTime': dateTime,
+        'dateTime': DateFormat('yyyy-MM-dd HH:mm').format(dateTime),
         'departureCityId': departure.id,
         'arrivalCityId': arrival.id,
       }),
