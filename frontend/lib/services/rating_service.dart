@@ -6,7 +6,7 @@ class RatingService {
 
   static Future<int> getRating(String id) async {
     final response = await ApiService.instance.get('/ratings/users/$id');
-    return response.data as int;
+    return (response.data as double).toInt();
   }
 
   static Future<User> getUser(String id) async {

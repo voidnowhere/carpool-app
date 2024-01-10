@@ -1,7 +1,9 @@
 import 'package:carpool/dialogs/add_trip_modal.dart';
 import 'package:carpool/models/city.dart';
 import 'package:carpool/models/trip.dart';
+import 'package:carpool/screens/message_screen.dart';
 import 'package:carpool/screens/rate_user_screen.dart';
+import 'package:carpool/services/auth_service.dart';
 import 'package:carpool/services/city_service.dart';
 import 'package:carpool/services/trip_service.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +70,44 @@ class _TripsScreenState extends State<TripsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trips'),
+        actions: [
+          PopupMenuButton(
+            offset: const Offset(0, 50),
+            icon: const Icon(
+              Icons.menu,
+            ),
+            onSelected: (value) {
+              // Profile
+              if (value == 0) {
+                Navigator.pushNamed(context, 'profile');
+              }
+              // Password
+              else if (value == 1) {
+                AuthService.logout(context);
+              }
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                  value: 0,
+                  child: Row(
+                    children: [
+                      Icon(Icons.account_circle),
+                      SizedBox(width: 5),
+                      Text('Profile'),
+                    ],
+                  )),
+              PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout),
+                      SizedBox(width: 5),
+                      Text('Logout'),
+                    ],
+                  )),
+            ],
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTripDialog,
@@ -131,10 +171,22 @@ class _TripsScreenState extends State<TripsScreen> {
                   itemBuilder: (context, index) {
                     Trip t = _trips.elementAt(index);
                     return ListTile(
-                      selected: t.owner,
-                      leading: badges.Badge(
-                        badgeContent: Text(t.seats.toString()),
-                        child: const Icon(Icons.people),
+                      leading: GestureDetector(
+                        onTap: () {
+                          if (t.joined) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MessageScreen(tripId: t.id),
+                              ),
+                            );
+                          }
+                        },
+                        child: badges.Badge(
+                          badgeContent: Text(t.seats.toString()),
+                          child: const Icon(Icons.people),
+                        ),
                       ),
                       title: Text(t.dateTimeFormated),
                       subtitle: Column(

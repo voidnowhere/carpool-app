@@ -26,23 +26,10 @@ import java.util.UUID;
 public class TripService {
     private final TripRepository tripRepository;
     private final PassengerRepository passengerRepository;
-    private final UserRepository userRepository;
-    private final UserClient userClient;
+    private final UserService userService;
 
     public ResponseEntity<String> store(Trip trip) {
-        UUID userId = trip.getDriver().getId();
-        UserResponse userResponse = userClient.get(userId);
-        Optional<User> optionalUser = userRepository.findById(userId);
-
-        if (optionalUser.isEmpty()) {
-            userRepository.save(new User(userId, userResponse.getName(), userResponse.getEmail()));
-        } else {
-            User user = optionalUser.get();
-            user.setName(userResponse.getName());
-            user.setEmail(userResponse.getEmail());
-            userRepository.save(user);
-        }
-
+        userService.syncUser(trip.getDriver().getId());
         tripRepository.save(trip);
         return ResponseEntity.ok().build();
     }
@@ -93,6 +80,8 @@ public class TripService {
         if (trip.getSeats() <= trip.getPassengers().size()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("max capacity");
         }
+
+        userService.syncUser(userId);
 
         passengerRepository.save(new Passenger(new User(userId), trip));
 

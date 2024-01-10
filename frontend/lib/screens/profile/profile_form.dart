@@ -13,30 +13,43 @@ class _ProfileFormState extends State<ProfileForm> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ProfileService.getProfile().then((response) {
-        final responseData = response.data as Map<String, dynamic>;
-        _nameController.text = responseData['name'] ?? 'non';
-        _emailController.text = responseData['email'] ?? 'non';
-      }).catchError((error) {
-        print("Erreur lors de la récupération du profil : ${error.toString()}");
+    _getProfile();
+  }
+
+  void _getProfile() {
+    setState(() {
+      _loading = true;
+    });
+    ProfileService.getProfile().then((response) {
+      final responseData = response.data;
+      _nameController.text = responseData['name'];
+      _emailController.text = responseData['email'];
+      setState(() {
+        _loading = false;
       });
-      
     });
   }
 
   void _update() {
+    setState(() {
+      _loading = true;
+    });
     ProfileService.updateProfile(
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
     ).then((value) {
-      print("Update Succesfully");
-    }).catchError((error) {
-      print("Erreur lors de la modification du profil : ${error.toString()}");
+      _passwordController.clear();
+      setState(() {
+        _loading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Profile updated successfully!')));
     });
   }
 
@@ -44,41 +57,53 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _nameController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                label: const Text('Name'),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: (_loading)
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      label: Text('Name'),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      label: Text('Email'),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      label: Text('Password'),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      shadowColor: Colors.greenAccent,
+                      minimumSize: const Size(40, 40),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _update();
+                      }
+                    },
+                    child: const Text('Update'),
+                  ),
+                ],
               ),
-            ),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                label: const Text('Email'),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.greenAccent,
-                minimumSize: Size(40, 40),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _update();
-                  Navigator.pushNamed(context, 'login');
-                }
-              },
-              child: Text('Update'),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -34,7 +34,11 @@ class _RateUserScreenState extends State<RateUserScreen> {
   }
 
   void _updateRating(int ratingVal, String driverId) {
-    RatingService.updateRating(ratingVal, driverId).then((value) {});
+    RatingService.updateRating(ratingVal, driverId).then((value) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Rated successfully!')));
+    });
   }
 
   @override
@@ -51,68 +55,73 @@ class _RateUserScreenState extends State<RateUserScreen> {
             children: [
               (_rating == null && _user == null)
                   ? const CircularProgressIndicator()
-                  : const Icon(
-                      Icons.account_circle,
-                      color: Color.fromARGB(255, 99, 154, 249),
-                      size: 150.0,
-                    ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return Icon(
-                    index < _rating!.stars.floor()
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: Colors.amber,
-                    size: 32,
-                  );
-                }),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _user!.name,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                enabled: false,
-                initialValue: _user!.email,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedRate = index + 1;
-                      });
-                    },
-                    icon: Icon(
-                      index < _selectedRate.floor()
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: Colors.amber,
-                      size: 32,
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  _updateRating(_selectedRate, widget.driver.id);
-                },
-                child: const Text('Submit Rating'),
-              ),
+                  : Column(
+                      children: [
+                        const Icon(
+                          Icons.account_circle,
+                          color: Color.fromARGB(255, 99, 154, 249),
+                          size: 150.0,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            return Icon(
+                              index < (_rating?.stars ?? 0)
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                              size: 32,
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          enabled: false,
+                          initialValue: _user?.name ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'Name',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          enabled: false,
+                          initialValue: _user?.email ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            return IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedRate = index + 1;
+                                });
+                              },
+                              icon: Icon(
+                                index < _selectedRate.floor()
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: Colors.amber,
+                                size: 32,
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            _updateRating(_selectedRate, widget.driver.id);
+                          },
+                          child: const Text('Submit Rating'),
+                        ),
+                      ],
+                    )
             ],
           ),
         ),
